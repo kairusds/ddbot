@@ -1,0 +1,35 @@
+{
+  "name": "ddbot",
+  "version": "1.0.0",
+  "description": "a selfbot of collective resurgence",
+  "license": "AGPL-3.0",
+  "author": "kairusds",
+  "private": true,
+  "scripts": {
+    "test": "echo \"die\" && exit 1",
+    "start": "node index.js"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "common-tags": "^1.8.0",
+    "discord.js": "discordjs/discord.js#11.4-dev",
+    "discord.js-minesweeper": "^1.0.3",
+    "@discordjs/uws": "^11.149.1",
+    "express": "^4.16.4",
+    "ffmpeg-binaries": "^4.0.0",
+    "generate-password": "^1.4.1",
+    "is-reachable": "^3.0.0",
+    "jszip": "^3.1.5",
+    "got": "^9.2.2",
+    "moment": "^2.22.2",
+    "node-emoji": "^1.10.0",
+    "node-opus": "^0.3.1",
+    "prettier-bytes": "^1.0.3",
+    "sharp": "^0.21.3",
+    "webtorrent": "^0.103.0"
+  },
+  "engines": {
+    "node": "8.15.1"
+  }
+}
