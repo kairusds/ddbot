@@ -1,5 +1,3 @@
-const got = require("got");
-
 module.exports = {
 	name: "prune",
 	format: "[amount=1]",
@@ -9,25 +7,23 @@ module.exports = {
 		const amount = Number(args[0]) || 1;
 		let count = 0;
 		
-		function sleep(milliseconds){
-			const start = new Date().getTime();
-			while(true){
-				if((new Date().getTime() - start) > milliseconds) break;
-			}
+		function deleteMessages(){
+			if(count === amount) return;
+			const messages = await message.channel.fetchMessages({limit: 100});
+			messages
+				.filter(msg => msg.author.id === client.user.id && msg.hit)
+				.array().forEach(msg => {
+					msg.delete().then(() => {
+						count++;
+						if(count >= 100) deleteStuff();
+					}).catch(() => {
+						count++;
+						if(count >= 100) deleteStuff();
+					});
+				});
 		}
 		
-		function deleteMsg(msg){
-			if(count < amount){
-				count++;
-				msg.delete();
-				sleep(500);
-			}
-		}
-		
-		message.channel.messages
-			.filter(msg => msg.author.id === client.user.id && msg.hit)
-			.map(deleteMsg);
-		
+		deleteMessages();
 		if(count > 0) message.edit(`Deleted ${count} ${count > 1 ? `messages` : `message`}.`, {code: true});
 		message.edit("No messages were deleted.", {code: true});
 	}
