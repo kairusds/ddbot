@@ -7,7 +7,7 @@ module.exports = {
 		const amount = Number(args[0]) || 1;
 		let count = 0;
 		
-		function deleteMessages(){
+		async function deleteMessages(){
 			if(count === amount) return;
 			const messages = await message.channel.fetchMessages({limit: 100});
 			messages
@@ -16,7 +16,7 @@ module.exports = {
 					msg.delete().then(() => {
 						count++;
 						if(count >= 100) deleteMessages();
-					}).catch(() => {
+					}).catch(err => {
 						count++;
 						if(count >= 100) deleteMessages();
 					});
