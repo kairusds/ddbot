@@ -9,7 +9,7 @@ const scrape = got.extend({baseUrl: "https://nhentai.net"});
 // my laziness showing
 async function doujinExists(id){
 	try{
-		await scrape.head(`g/id`);
+		await scrape.head(`g/${id}`);
 		return true;
 	}catch(err){
 		return false;
