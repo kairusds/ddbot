@@ -18,15 +18,15 @@ module.exports = {
 		
 		function deleteMsg(msg){
 			if(count < amount){
-				if(msg.author.id !== client.user.id || !msg.hit) return;
 				count++;
 				msg.delete();
 				sleep(500);
 			}
 		}
 		
-		sleep(500);
-		message.channel.messages.map(deleteMsg);
+		message.channel.messages
+			.filter(msg => msg.author.id === client.user.id && msg.hit)
+			.map(deleteMsg);
 		
 		if(count > 0) message.edit(`Deleted ${count} ${count > 1 ? `messages` : `message`}.`, {code: true});
 		message.edit("No messages were deleted.", {code: true});
