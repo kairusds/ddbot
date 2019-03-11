@@ -4,7 +4,6 @@ const {Attachment} = require("discord.js");
 const fs = require("fs");
 const moment = require("moment");
 const prettierBytes = require("prettier-bytes");
-const logger = require("../logger");
 
 module.exports = {
 	name: "torrent",
@@ -23,7 +22,7 @@ module.exports = {
 			// most of it is coded and modified by me (harvey)
 			let updateInterval;
 			const client = new WebTorrent();
-			client.on("error", logger.err);
+			client.on("error", err => newMessage.edit(err, {code: true}));
 			const torrent = client.add(file, {path: `../${uniqueStr}`});
 			torrent.on("infoHash", () => {
 				function updateMetadata(){
@@ -55,7 +54,7 @@ module.exports = {
 					streamFiles: true
 				});
 				await message.channel.send(`Uploaded!`, new Attachment(generatedZip, `${torrent.name}.zip`));
-				client.destroy(logger.err);
+				client.destroy(newMessage.edit);
 			});
 			
 			updateInterval = botclient.setInterval(() =>
