@@ -7,7 +7,7 @@ module.exports = {
 	name: "vcsfx",
 	description: "Display a soundboard for use on a voice channel.",
 	run: async (client, message, args) => {
-		const connection = client.voiceConnections.get(message.guild.id);
+		const {connection} = message.member.voiceChannel;
 		if(!connection) return message.edit("No voice connection found.", {code: true});
 		await message.delete();
 		const msg = await message.channel.send(":loud_sound:");

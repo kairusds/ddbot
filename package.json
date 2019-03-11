@@ -21,7 +21,7 @@
     "generate-password": "^1.4.1",
     "is-reachable": "^3.0.0",
     "jszip": "^3.1.5",
-    "got": "github:sindresorhus/got#master",
+    "got": "sindresorhus/got#master",
     "moment": "^2.22.2",
     "node-emoji": "^1.10.0",
     "node-opus": "^0.3.1",
@@ -30,6 +30,7 @@
     "webtorrent": "^0.103.0"
   },
   "engines": {
-    "node": "8.15.1"
+    "node": "8.15.1",
+    "npm": "6.9.0"
   }
 }
