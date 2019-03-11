@@ -1,24 +1,34 @@
+const got = require("got");
+
 module.exports = {
 	name: "prune",
-	format: "[amount=1, limit=200]",
+	format: "[amount=1]",
 	description: "Delete own message(s) from the current channel.",
 	run: async (client, message, args) => {
 		// parseInt() is too old for es6
 		const amount = Number(args[0]) || 1;
-		const limit = Number(args[1]) || 100;
 		let count = 0;
-		function deleteMsg(msg){
-			if(count < amount){
-				count++;
-				msg.delete();
+		
+		function sleep(milliseconds){
+			const start = new Date().getTime();
+			while(true){
+				if((new Date().getTime() - start) > milliseconds) break;
 			}
 		}
-		const messages = await message.channel.fetchMessages({limit});
-		messages
-			.filter(msg => msg.author.id === client.user.id)
-			.map(deleteMsg);
 		
-		if(count > 0) return message.edit(`Deleted ${count} ${count > 1 ? `messages` : `message`}.`, {code: true});
+		function deleteMsg(msg){
+			if(count < amount){
+				if(msg.author.id !== client.user.id || !msg.hit) return;
+				count++;
+				msg.delete();
+				sleep(500);
+			}
+		}
+		
+		sleep(500);
+		message.channel.messages.map(deleteMsg);
+		
+		if(count > 0) message.edit(`Deleted ${count} ${count > 1 ? `messages` : `message`}.`, {code: true});
 		message.edit("No messages were deleted.", {code: true});
 	}
 };
