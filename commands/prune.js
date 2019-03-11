@@ -7,23 +7,16 @@ module.exports = {
 		const amount = Number(args[0]) || 1;
 		let count = 0;
 		
-		async function deleteMessages(){
-			if(count === amount) return;
-			const messages = await message.channel.fetchMessages({limit: 100});
-			messages
-				.filter(msg => msg.author.id === client.user.id && msg.hit)
-				.array().forEach(msg => {
-					msg.delete().then(() => {
-						count++;
-						if(count >= 100) deleteMessages();
-					}).catch(err => {
-						count++;
-						if(count >= 100) deleteMessages();
-					});
-				});
+		function deleteMsg(msg){
+			if(count < amount){
+				count++;
+				msg.delete();
+			}
 		}
 		
-		deleteMessages();
+		message.channel.messages
+			.filter(msg => msg.author.id === client.user.id)
+			.map(deleteMsg);
 		if(count > 0) message.edit(`Deleted ${count} ${count > 1 ? `messages` : `message`}.`, {code: true});
 		message.edit("No messages were deleted.", {code: true});
 	}
