@@ -15,10 +15,10 @@ module.exports = {
 				.array().forEach(msg => {
 					msg.delete().then(() => {
 						count++;
-						if(count >= 100) deleteStuff();
+						if(count >= 100) deleteMessages();
 					}).catch(() => {
 						count++;
-						if(count >= 100) deleteStuff();
+						if(count >= 100) deleteMessages();
 					});
 				});
 		}
