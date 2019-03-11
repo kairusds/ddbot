@@ -6,9 +6,10 @@ module.exports = {
 		// parseInt() is too old for es6
 		const amount = Number(args[0]) || 1;
 		const limit = Number(args[1]) || 100;
-		let count;
+		let count = 0;
 		function deleteMsg(msg){
-			for(count = 0; count < amount; count++){
+			if(count < amount){
+				count++;
 				msg.delete();
 			}
 		}
@@ -17,7 +18,7 @@ module.exports = {
 			.filter(msg => msg.author.id === client.user.id)
 			.map(deleteMsg);
 		
-		if(Number.isInteger(count)) return message.edit(`Deleted ${count} ${count > 1 ? `messages` : `message`}.`, {code: true});
+		if(count > 0) return message.edit(`Deleted ${count} ${count > 1 ? `messages` : `message`}.`, {code: true});
 		message.edit("No messages were deleted.", {code: true});
 	}
 };
