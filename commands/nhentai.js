@@ -4,11 +4,12 @@ const cheerio = require("cheerio");
 const fs = require("fs");
 const got = require("got");
 const logger = require("../logger");
+const scrape = got.extend({baseUrl: "https://nhentai.net"});
 
 // my laziness showing
 async function doujinExists(id){
 	try{
-		await got.head(`https://nhentai.net/g/id`);
+		await scrape.head(`g/id`);
 		return true;
 	}catch(err){
 		return false;
@@ -16,10 +17,7 @@ async function doujinExists(id){
 }
 
 async function getDoujinInfo(id){
-	const body = await got(`https://nhentai.net/g/${id}`, {
-		responseType: "text",
-		resolveBodyOnly: true
-	});
+	const {body} = await scrape(`g/${id}`).text();
 	const $ = cheerio.load(body);
 	const info = [];
 	let $info = $("#info"),
@@ -40,10 +38,7 @@ async function getDoujinInfo(id){
 
 async function search(query, page = 1, sort = "date", limit = 4){
 	if(!["date", "popular"].includes(sort)) return;
-	const body = await got(`https://nhentai.net/search/?q=${query.replace(/ /g, "+")}&page=${page}&sort=${sort}`, {
-		responseType: "text",
-		resolveBodyOnly: true
-	});
+	const {body} = await scrape(`search/?q=${query.replace(/ /g, "+")}&page=${page}&sort=${sort}`).text();
 	const $ = cheerio.load(body);
 	const results = [];
 	
@@ -59,11 +54,8 @@ async function search(query, page = 1, sort = "date", limit = 4){
 
 async function downloadDoujin(id){
 	const zip = new JSZip();
-	const page = await got(`https://nhentai.net/g/${id}`, {
-		responseType: "text",
-		resolveBodyOnly: true
-	});
-	const $ = cheerio.load(page);
+	const page = await scrape(`g/${id}`).text();
+	const $ = cheerio.load(page.body);
 	const title = $("#info").find("h1").text();
 	const info = await getDoujinInfo(id);
 	zip.file("info.txt", info);
@@ -72,10 +64,7 @@ async function downloadDoujin(id){
 		let src = $(element).data("src");
 		if(/^\/\/t\./i.test(src)) src = `https:${src}`;
 		src = src.replace("t.n", "i.n").replace(/\/(\d+)t\./, "/$1.");
-		const body = await got(src`, {
-			responseType: "buffer",
-			resolveBodyOnly: true
-		});
+		const {body} = await scrape(src).buffer();
 		let filename = src.replace(/.*\//g, "").split(".");
 		filename = `${(`0000${filename[0]}`).slice(-4)}.${filename[1]}`;
 		zip.file(filename, body);
