@@ -17,7 +17,5 @@ module.exports = {
 		message.channel.messages
 			.filter(msg => msg.author.id === client.user.id)
 			.map(deleteMsg);
-		if(count > 0) message.edit(`Deleted ${count} ${count > 1 ? `messages` : `message`}.`, {code: true});
-		message.edit("No messages were deleted.", {code: true});
 	}
 };

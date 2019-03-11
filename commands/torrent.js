@@ -59,8 +59,8 @@ module.exports = {
 			});
 			
 			updateInterval = botclient.setInterval(() =>
-				newMessage.edit(`\`Downloading ${torrent.name}... prettierBytes(torrent.downloaded)/${prettierBytes(torrent.length)}\``)
-			, 1500);
+				newMessage.edit(`\`Downloading ${torrent.name}... ${torrent.downloaded && prettierBytes(torrent.downloaded)}/${torrent.length && prettierBytes(torrent.length)}\``)
+			, 2000);
 		}catch(err){
 			message.edit(err, {code: true});
 		}
