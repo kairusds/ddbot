@@ -4,7 +4,6 @@
   "description": "a selfbot of collective resurgence",
   "license": "AGPL-3.0",
   "author": "kairusds",
-  "private": true,
   "scripts": {
     "test": "echo \"die\" && exit 1",
     "start": "node index.js"
@@ -21,7 +20,7 @@
     "generate-password": "^1.4.1",
     "is-reachable": "^3.0.0",
     "jszip": "^3.1.5",
-    "got": "next",
+    "got": "latest",
     "moment": "^2.22.2",
     "node-emoji": "^1.10.0",
     "node-opus": "^0.3.1",
