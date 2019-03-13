@@ -5,8 +5,7 @@
   "license": "AGPL-3.0",
   "author": "kairusds",
   "scripts": {
-    "test": "echo \"die\" && exit 1",
-    "start": "node index.js"
+    "start": "pm2 start index.js --watch --deep-monitoring --attach"
   },
   "main": "index.js",
   "dependencies": {
@@ -15,7 +14,6 @@
     "discord.js": "discordjs/discord.js#11.4-dev",
     "discord.js-minesweeper": "^1.0.3",
     "@discordjs/uws": "^11.149.1",
-    "express": "^4.16.4",
     "ffmpeg-binaries": "^4.0.0",
     "generate-password": "^1.4.1",
     "is-reachable": "^3.0.0",

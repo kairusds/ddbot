@@ -3,7 +3,6 @@ A useless Discord selfbot I made in my boring hours.
 
 <table>
 <tr><th>ENV</th><th>ENV Description</th></tr>
-<tr><td>PORT*</td><td>port for webserver to keep the bot alive (heroku)</td></tr>
 <tr><td>prefix*</td><td>command prefix</td></tr>
 <tr><td>token*</td><td>user account token</td></tr>
 <tr><td>webhookID*</td><td>guild channel webhook's id for logging</td></tr>
