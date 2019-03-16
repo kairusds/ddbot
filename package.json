@@ -5,7 +5,7 @@
   "license": "AGPL-3.0",
   "author": "kairusds",
   "scripts": {
-    "start": "pm2 start index.js --watch --deep-monitoring --attach"
+    "start": "npx pm2 start index.js --watch --deep-monitoring --attach"
   },
   "main": "index.js",
   "dependencies": {

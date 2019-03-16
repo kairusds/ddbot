@@ -13,8 +13,6 @@ module.exports = {
 		// mindful's magic
 		const file = ((ref = message.attachments.array()) != null ? (ref1 = ref[0]) != null ? ref1.url : null : null) || args[0];
 		if(!file) return message.edit("Missing argument 0 (torrent url / magnet uri / torrent attachment).", {code: true});
-		// generates a string of random 5 alphanumerical characters, always unique (source: https://stackoverflow.com/a/28997977/6378928)
-		const uniqueStr = (0 | Math.random() * 9e6).toString(32);
 		await message.delete();
 		const newMessage = await message.channel.send("Loading downloader...");
 		try{
@@ -23,43 +21,41 @@ module.exports = {
 			let updateInterval;
 			const client = new WebTorrent();
 			client.on("error", err => newMessage.edit(err, {code: true}));
-			const torrent = client.add(file, {path: uniqueStr}});
-			torrent.on("infoHash", () => {
-				function updateMetadata(){
-					newMessage.edit(`Fetching torrent metadata from ${torrent.numPeers} peers...`, {code: true});
-				}
-				updateMetadata();
-				torrent.on("wire", updateMetadata);
-				torrent.on("metadata", () => {
-					torrent.removeListener("wire", updateMetadata);
-					newMessage.edit("Verifying existing torrent data...", {code: true});
+			client.add(file, (torrent) => {
+				torrent.on("infoHash", () => {
+					const updateMetadata = () => newMessage.edit(`Fetching torrent metadata from ${torrent.numPeers} peers...`, {code: true});
+					updateMetadata();
+					torrent.on("wire", updateMetadata);
+					torrent.on("metadata", () => {
+						torrent.removeListener("wire", updateMetadata);
+						newMessage.edit("Verifying existing torrent data...", {code: true});
+					});
 				});
-			});
-			
-			torrent.on("done", async () => {
-				const activeWires = torrent.wires.reduce((num, wire) => num + (wire.downloaded > 0), 0);
-				newMessage.edit(`Torrent downloaded successfully from ${activeWires}/${torrent.numPeers} peers! Uploading...`, {code: true});
-				botclient.clearInterval(updateInterval);
-				newMessage.delete();
 				
-				const zip = new JSZip();
-				zip.folder(uniqueStr)
-					.forEach((relativePath, file) => zip.file(file.name));
-				const generatedZip = await zip.generateAsync({
-					compression: "DEFLATE",
-					compressionOptions: {
-						level: 9
-					},
-					type: "nodebuffer",
-					streamFiles: true
+				torrent.on("done", async () => {
+					const activeWires = torrent.wires.reduce((num, wire) => num + (wire.downloaded > 0), 0);
+					newMessage.edit(`Torrent downloaded successfully from ${activeWires}/${torrent.numPeers} peers! Uploading...`, {code: true});
+					botclient.clearInterval(updateInterval);
+					newMessage.delete();
+					
+					const zip = new JSZip();
+					torrent.files.forEach((file) => file.getBuffer((err, buffer) => zip.file(buffer)));
+					const generatedZip = await zip.generateAsync({
+						compression: "DEFLATE",
+						compressionOptions: {
+							level: 9
+						},
+						type: "nodebuffer",
+						streamFiles: true
+					});
+					await message.channel.send("", new Attachment(generatedZip, `${torrent.name}.zip`));
+					client.destroy(newMessage.edit);
 				});
-				await message.channel.send("", new Attachment(generatedZip, `${torrent.name}.zip`));
-				client.destroy(newMessage.edit);
+				
+				updateInterval = botclient.setInterval(() =>
+					newMessage.edit(`\`Downloading ${torrent.name}... ${prettierBytes(torrent.downloaded)}/${prettierBytes(torrent.length)}\``)
+				, 2000);
 			});
-			
-			updateInterval = botclient.setInterval(() =>
-				newMessage.edit(`\`Downloading ${torrent.name}... ${torrent.downloaded && prettierBytes(torrent.downloaded)}/${torrent.length && prettierBytes(torrent.length)}\``)
-			, 2000);
 		}catch(err){
 			message.edit(err, {code: true});
 		}
