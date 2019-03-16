@@ -23,7 +23,7 @@ module.exports = {
 			let updateInterval;
 			const client = new WebTorrent();
 			client.on("error", err => newMessage.edit(err, {code: true}));
-			const torrent = client.add(file, {path: `../${uniqueStr}`});
+			const torrent = client.add(file, {path: uniqueStr}});
 			torrent.on("infoHash", () => {
 				function updateMetadata(){
 					newMessage.edit(`Fetching torrent metadata from ${torrent.numPeers} peers...`, {code: true});
@@ -43,7 +43,7 @@ module.exports = {
 				newMessage.delete();
 				
 				const zip = new JSZip();
-				zip.folder(`../${uniqueStr}`)
+				zip.folder(uniqueStr)
 					.forEach((relativePath, file) => zip.file(file.name));
 				const generatedZip = await zip.generateAsync({
 					compression: "DEFLATE",
@@ -53,7 +53,7 @@ module.exports = {
 					type: "nodebuffer",
 					streamFiles: true
 				});
-				await message.channel.send(`Uploaded!`, new Attachment(generatedZip, `${torrent.name}.zip`));
+				await message.channel.send("", new Attachment(generatedZip, `${torrent.name}.zip`));
 				client.destroy(newMessage.edit);
 			});
 			
