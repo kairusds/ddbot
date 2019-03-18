@@ -1,15 +1,23 @@
 const emoji = require("node-emoji");
+const logger = require("../logger");
 const sounds = {};
 
-// TODO: disable commands that requires one usage at a time
-// and re-enable them again after a few moments has passed
+// TODO: add a feature that disables a command requiring
+// one usage at a time and re-enable it again after a condition is fulfilled
 module.exports = {
 	name: "vcsfx",
+	format: "<vc name>",
 	description: "Display a soundboard for use on a voice channel.",
 	run: async (client, message, args) => {
-		const {connection} = message.member.voiceChannel;
-		if(!connection) return message.edit("No voice connection found.", {code: true});
+		if(message.member.voiceChannel) return message.edit(`\`Exit the voice channel you are in first then rerun the command.\``);
+		if(!args[0]) return message.edit(`\`Missing argument 0 (vc name).\``);
+		const voiceChannel = message.guild.channels.find(channel => channel.name === args[0]);
+		if(!voiceChannel || voiceChannel.type !== "voice") return message.edit(`\`Invalid voice channel specified.\``);
+		
+		const connection = await voiceChannel.join();
+		logger.log("vcsfx Command", "Voice Connected!");
 		await message.delete();
+		
 		const msg = await message.channel.send(":loud_sound:");
 		await msg.react(":x:");
 		for(const i in client.sounds){
@@ -28,7 +36,7 @@ module.exports = {
 		collector
 			.on("collect", (reaction) => {
 				if(reaction.emoji.name === emoji.get("x")) collector.stop();
-				connection.play(sounds[emoji.which(reaction.emoji.name)], {bitrate: "auto"});
+				connection.playFile(sounds[emoji.which(reaction.emoji.name)]);
 			})
 			.on("end", () => msg.delete());
 	}

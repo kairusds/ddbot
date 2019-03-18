@@ -1,8 +1,8 @@
 const {WebhookClient} = require("discord.js");
 const {webhookID, webhookToken} = process.env;
-const webhook = new WebhookClient(webhookID, webhookToken);
 
 function send(title, text){
+	const webhook = new WebhookClient(webhookID, webhookToken);
 	webhook.send(`[${title}] ${text}`);
 	console.log(`[${title}] ${text}`); // for insurance
 }
