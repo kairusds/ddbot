@@ -19,11 +19,11 @@ module.exports = {
 		await message.delete();
 		
 		const msg = await message.channel.send(":loud_sound:");
-		await msg.react(":x:");
+		await msg.react(emoji.get("x"));
 		for(const i in client.sounds){
 			const randomEmoji = emoji.random();
 			if(sounds[randomEmoji.key]) continue; // just in case the birthday paradox occurs when getting a random emoji
-			msg.react(`:${randomEmoji.key}:`);
+			msg.react(randomEmoji.emoji);
 			sounds[randomEmoji.key] = client.sounds[i];
 		}
 		
@@ -35,7 +35,7 @@ module.exports = {
 		const collector = msg.createReactionCollector(filter, {time: 1000 * 60 * 60});
 		collector
 			.on("collect", (reaction) => {
-				if(reaction.emoji.name === emoji.get("x")) collector.stop();
+				if(reaction.emoji.name === emoji.get("x")) return collector.stop();
 				connection.playFile(sounds[emoji.which(reaction.emoji.name)]);
 			})
 			.on("end", () => msg.delete());
