@@ -23,7 +23,7 @@ module.exports = {
 		for(const i in client.sounds){
 			const randomEmoji = emoji.random();
 			if(sounds[randomEmoji.key]) continue; // just in case the birthday paradox occurs when getting a random emoji
-			msg.react(randomEmoji.emoji);
+			await msg.react(randomEmoji.emoji);
 			sounds[randomEmoji.key] = client.sounds[i];
 		}
 		
