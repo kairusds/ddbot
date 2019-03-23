@@ -14,9 +14,9 @@ module.exports = {
 			const {body, statusCode, statusMessage} = await got(`https://screenshie.now.sh/1?uri=${url}`);
 			if(statusCode !== 200) return message.edit(`\`${statusMessage}\``);
 			await message.delete();
-			await message.channel.send(new Attachment(body, "screenshot.png");
+			await message.channel.send(new Attachment(body, "screenshot.png"));
 		}catch(err){
-			message.edit(err, {code: true});
+			message.edit(`\`${err}\``);
 		}
 	}
 };
