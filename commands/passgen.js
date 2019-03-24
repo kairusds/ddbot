@@ -1,6 +1,5 @@
 const {generate, generateMultiple} = require("generate-password");
 const {stripIndents} = require("common-tags");
-const sysinfo = require("systeminformation");
 const unicodePassword = require("unicode-password");
 
 module.exports = {
