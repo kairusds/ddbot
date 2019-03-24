@@ -1,6 +1,9 @@
 # ddbot
 A useless Discord selfbot I made in my boring hours.
 
+![codefactor](https://www.codefactor.io/repository/github/kairusds/ddbot/badge?style=for-the-badge)
+---
+
 <table>
 <tr><th>ENV</th><th>ENV Description</th></tr>
 <tr><td>prefix*</td><td>command prefix</td></tr>

@@ -1,5 +1,5 @@
-const got = require("got");
 const {Attachment} = require("discord.js");
+const got = require("got");
 
 const transformUrl = (str) => !str.startsWith("http") ? `http://${str}` : str;
 
@@ -11,12 +11,11 @@ module.exports = {
 		if(!args[0]) return message.edit(`\`Missing argument 0 (url).\``);
 		try{
 			const url = encodeURIComponent(transformUrl(args[0]));
-			const {body, statusCode, statusMessage} = await got(`https://screenshie.now.sh/1?uri=${url}`);
-			if(statusCode !== 200) return message.edit(`\`${statusMessage}\``);
+			const {body} = await got(`https://screenshie.now.sh/1?uri=${url}`);
 			await message.delete();
-			await message.channel.send(new Attachment(body, "screenshot.png"));
+			await message.channel.send("", new Attachment(body, "screenshot.png"));
 		}catch(err){
-			message.edit(`\`${err}\``);
+			message.edit(`\`${err.body}\``);
 		}
 	}
 };
