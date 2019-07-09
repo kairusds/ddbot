@@ -22,7 +22,7 @@
     "prettier-bytes": "^1.0.3",
     "sharp": "^0.22.0",
     "unicode-password": "kairusds/unicode-password#master",
-    "webtorrent": "^0.104.0"
+    "webtorrent": "^0.105.0"
   },
   "engines": {
     "node": "8.15.1",
