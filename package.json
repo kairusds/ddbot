@@ -5,7 +5,9 @@
   "license": "AGPL-3.0",
   "author": "kairusds",
   "scripts": {
-    "start": "npx pm2 start index.js --watch --deep-monitoring --attach"
+    "start": "npx pm2 start index.js --watch --deep-monitoring --attach",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "main": "index.js",
   "dependencies": {
@@ -22,10 +24,12 @@
     "prettier-bytes": "^1.0.3",
     "sharp": "^0.25.0",
     "unicode-password": "kairusds/unicode-password#master",
-    "webtorrent": "^0.108.0"
+    "webtorrent": "^0.108.0",
+    "snyk": "^1.316.1"
   },
   "engines": {
     "node": "8.15.1",
     "npm": "6.9.0"
-  }
+  },
+  "snyk": true
 }
