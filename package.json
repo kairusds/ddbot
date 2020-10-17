@@ -17,7 +17,7 @@
     "discord.js-minesweeper": "^1.0.3",
     "@discordjs/uws": "^11.149.1",
     "generate-password": "^1.4.1",
-    "is-reachable": "^4.0.0",
+    "is-reachable": "^5.0.0",
     "jszip": "^3.1.5",
     "got": "latest",
     "moment": "^2.22.2",
