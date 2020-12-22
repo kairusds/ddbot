@@ -22,7 +22,7 @@
     "got": "latest",
     "moment": "^2.22.2",
     "prettier-bytes": "^1.0.3",
-    "sharp": "^0.26.0",
+    "sharp": "^0.27.0",
     "unicode-password": "kairusds/unicode-password#master",
     "webtorrent": "^0.112.0",
     "snyk": "^1.316.1"
